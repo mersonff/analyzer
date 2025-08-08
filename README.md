@@ -1,5 +1,10 @@
 # Text Analyzer API
 
+[![Tests](https://img.shields.io/badge/tests-21%20passing-brightgreen)](https://github.com/mersonff/analyzer)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)](https://nodejs.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Uma API RESTful para análise de texto que fornece estatísticas detalhadas sobre textos fornecidos pelos usuários.
 
 ## Tecnologias Utilizadas
@@ -179,6 +184,43 @@ O projeto utiliza:
 - **API Principal**: Hugging Face (DistilBERT)
 - **Fallback Local**: Sistema baseado em palavras-chave
 - **Saída**: Sentimento (positive/negative/neutral), confiança e resumo em português
+
+## CI/CD e Qualidade
+
+O projeto inclui um pipeline completo de CI/CD com GitHub Actions:
+
+### ✅ Verificações Automáticas
+- **Testes unitários** (21 testes)
+- **Linting** com ESLint
+- **Formatação** com Prettier
+- **Type checking** com TypeScript
+- **Build** de produção
+- **Docker build** e teste do container
+- **Cobertura de código**
+
+### 🔒 Branch Protection
+- **Main branch protegida** - não permite push direto
+- **Pull requests obrigatórios**
+- **Status checks obrigatórios** - todos os testes devem passar
+- **Reviews obrigatórios** antes do merge
+- **Branch deve estar atualizada** com main
+
+### 🚀 Como usar
+```bash
+# Configurar branch protection (uma vez só)
+./setup-branch-protection.sh
+
+# Workflow automático roda em:
+# - Push para main/develop
+# - Pull requests para main/develop
+```
+
+### 📊 Status Checks
+O workflow verifica:
+1. **Tests** - Todos os testes unitários
+2. **Quality Check** - Lint, format, type check
+3. **Build Docker** - Container funcional
+4. **CI Status** - Status geral combinado
 
 ---
 
