@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Source code (we copy only built dist/)
+src/
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+examples.md
+
+# Docker files
+Dockerfile
+.dockerignore
+
+# Development files
+coverage/
+jest.config.js
+.eslintrc.js
+.prettierrc
+tsconfig.json
+nodemon.json
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+
+# Deployment scripts
+deploy.sh
+setup-permissions.sh
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/

@@ -1,0 +1,191 @@
+// Lista de stopwords em português e inglês
+const STOPWORDS = new Set([
+  // Portuguese stopwords
+  'a',
+  'ao',
+  'aos',
+  'aquela',
+  'aquelas',
+  'aquele',
+  'aqueles',
+  'aquilo',
+  'as',
+  'até',
+  'com',
+  'como',
+  'da',
+  'das',
+  'de',
+  'dela',
+  'delas',
+  'dele',
+  'deles',
+  'depois',
+  'do',
+  'dos',
+  'e',
+  'ela',
+  'elas',
+  'ele',
+  'eles',
+  'em',
+  'entre',
+  'essa',
+  'essas',
+  'esse',
+  'esses',
+  'esta',
+  'estas',
+  'este',
+  'estes',
+  'eu',
+  'isso',
+  'isto',
+  'já',
+  'mais',
+  'mas',
+  'me',
+  'mesmo',
+  'meu',
+  'meus',
+  'minha',
+  'minhas',
+  'muito',
+  'na',
+  'nas',
+  'não',
+  'no',
+  'nos',
+  'nós',
+  'nossa',
+  'nossas',
+  'nosso',
+  'nossos',
+  'num',
+  'numa',
+  'o',
+  'os',
+  'ou',
+  'para',
+  'pela',
+  'pelas',
+  'pelo',
+  'pelos',
+  'por',
+  'qual',
+  'quando',
+  'que',
+  'quem',
+  'são',
+  'se',
+  'sem',
+  'seu',
+  'seus',
+  'só',
+  'sua',
+  'suas',
+  'também',
+  'te',
+  'tem',
+  'ter',
+  'teu',
+  'teus',
+  'tu',
+  'tua',
+  'tuas',
+  'um',
+  'uma',
+  'você',
+  'vocês',
+  'vos',
+  // English stopwords
+  'the',
+  'a',
+  'an',
+  'and',
+  'or',
+  'but',
+  'in',
+  'on',
+  'at',
+  'to',
+  'for',
+  'of',
+  'with',
+  'by',
+  'is',
+  'are',
+  'was',
+  'were',
+  'be',
+  'been',
+  'have',
+  'has',
+  'had',
+  'do',
+  'does',
+  'did',
+  'will',
+  'would',
+  'could',
+  'should',
+  'may',
+  'might',
+  'must',
+  'can',
+  'this',
+  'that',
+  'these',
+  'those',
+  'i',
+  'you',
+  'he',
+  'she',
+  'it',
+  'we',
+  'they',
+  'me',
+  'him',
+  'her',
+  'us',
+  'them',
+  'my',
+  'your',
+  'his',
+  'its',
+  'our',
+  'their',
+]);
+
+export class StopwordsService {
+  public isStopword(word: string): boolean {
+    return STOPWORDS.has(word.toLowerCase());
+  }
+
+  public filterStopwords(words: string[]): string[] {
+    return words.filter(word => !this.isStopword(word));
+  }
+
+  public getTopWords(
+    words: string[],
+    count: number = 5
+  ): Array<{ word: string; count: number }> {
+    // Filter out stopwords and short words
+    const filteredWords = words.filter(
+      word => word.length > 2 && !this.isStopword(word)
+    );
+
+    // Count word frequency
+    const frequency: Record<string, number> = {};
+    for (const word of filteredWords) {
+      const normalizedWord = word.toLowerCase();
+      frequency[normalizedWord] = (frequency[normalizedWord] || 0) + 1;
+    }
+
+    // Sort by frequency and return top N
+    return Object.entries(frequency)
+      .map(([word, count]) => ({ word, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, count);
+  }
+}
