@@ -157,10 +157,12 @@ Acesse a documentação interativa da API em: `http://localhost:3000/api-docs`
 src/
 ├── controllers/     # Controladores da API (textController.ts)
 ├── middleware/      # Middlewares (validation.ts, errorHandler.ts)
-├── routes/         # Definição das rotas (textRoutes.ts)
-├── services/       # Lógica de negócio (análise de texto, cache, sentimento, stopwords)
-├── utils/          # Utilitários (logger.ts)
-└── __tests__/      # Testes unitários
+├── routes/          # Definição das rotas (textRoutes.ts)
+├── services/        # Lógica de negócio (análise de texto, cache, sentimento, stopwords)
+├── utils/           # Utilitários (logger.ts)
+└── __tests__/       # Testes unitários
+
+logs/                # Logs da aplicação (combined.log, error.log)
 ```
 
 ## Limites e Validações
