@@ -60,7 +60,7 @@ class TextController {
   ): Promise<void> => {
     try {
       const { term } = req.query;
-      
+
       if (!term || typeof term !== 'string') {
         res.status(400).json({
           error: 'Search term is required and must be a string',

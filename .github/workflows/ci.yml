@@ -1,0 +1,128 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run linter
+      run: npm run lint
+    
+    - name: Check code formatting
+      run: npm run format:check
+    
+    - name: Run type check
+      run: npx tsc --noEmit
+    
+    - name: Run tests
+      run: npm test
+    
+    - name: Build project
+      run: npm run build
+
+  # Job adicional para análise de qualidade
+  quality-check:
+    name: Quality Check
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run tests with coverage
+      run: npm test -- --coverage
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      if: always()
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/lcov.info
+        fail_ci_if_error: false
+
+  # Job para verificar se o deploy funciona
+  build-docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [test, quality-check]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Build project
+      run: npm run build
+    
+    - name: Build Docker image
+      run: docker build -t text-analyzer-test .
+    
+    - name: Test Docker container
+      run: |
+        docker run -d -p 8080:8080 --name test-container text-analyzer-test
+        sleep 10
+        curl -f http://localhost:8080/api-docs || exit 1
+        docker stop test-container
+        docker rm test-container
+
+  # Status check que combina todos os jobs
+  ci-status:
+    name: CI Status
+    runs-on: ubuntu-latest
+    needs: [test, quality-check, build-docker]
+    if: always()
+    
+    steps:
+    - name: Check CI results
+      run: |
+        if [[ "${{ needs.test.result }}" == "success" && "${{ needs.quality-check.result }}" == "success" && "${{ needs.build-docker.result }}" == "success" ]]; then
+          echo "✅ All CI checks passed!"
+          exit 0
+        else
+          echo "❌ CI checks failed!"
+          echo "Test result: ${{ needs.test.result }}"
+          echo "Quality check result: ${{ needs.quality-check.result }}"
+          echo "Docker build result: ${{ needs.build-docker.result }}"
+          exit 1
+        fi

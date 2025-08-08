@@ -45,7 +45,8 @@ describe('TextAnalysisService', () => {
     });
 
     it('should filter stopwords in topWords', async () => {
-      const text = 'The big dog and the cat. The dog is very big and beautiful.';
+      const text =
+        'The big dog and the cat. The dog is very big and beautiful.';
       const result = await service.analyzeText(text, false);
 
       // topWords should not include most common stopwords like "the", "and", "is"
@@ -76,7 +77,9 @@ describe('TextAnalysisService', () => {
 
       expect(result.sentiment).toBeDefined();
       if (result.sentiment) {
-        expect(['positive', 'negative', 'neutral']).toContain(result.sentiment.sentiment);
+        expect(['positive', 'negative', 'neutral']).toContain(
+          result.sentiment.sentiment
+        );
         expect(typeof result.sentiment.confidence).toBe('number');
         expect(typeof result.sentiment.summary).toBe('string');
       }

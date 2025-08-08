@@ -34,10 +34,10 @@ describe('CacheService - Search Term', () => {
           sentiment: {
             sentiment: 'positive' as const,
             confidence: 0.9,
-            summary: 'Sentimento positivo detectado'
-          }
+            summary: 'Sentimento positivo detectado',
+          },
         },
-        timestamp: '2025-01-01T00:00:00Z'
+        timestamp: '2025-01-01T00:00:00Z',
       };
 
       const testAnalysis2 = {
@@ -54,10 +54,10 @@ describe('CacheService - Search Term', () => {
           sentiment: {
             sentiment: 'neutral' as const,
             confidence: 0.5,
-            summary: 'Sentimento neutro'
-          }
+            summary: 'Sentimento neutro',
+          },
         },
-        timestamp: '2025-01-01T00:01:00Z'
+        timestamp: '2025-01-01T00:01:00Z',
       };
 
       cacheService.addAnalysis(testAnalysis1);
@@ -94,10 +94,10 @@ describe('CacheService - Search Term', () => {
           sentiment: {
             sentiment: 'neutral' as const,
             confidence: 0.5,
-            summary: 'Sentimento neutro'
-          }
+            summary: 'Sentimento neutro',
+          },
         },
-        timestamp: '2025-01-01T00:00:00Z'
+        timestamp: '2025-01-01T00:00:00Z',
       };
 
       cacheService.addAnalysis(testAnalysis);
@@ -127,10 +127,10 @@ describe('CacheService - Search Term', () => {
             sentiment: {
               sentiment: 'neutral' as const,
               confidence: 0.5,
-              summary: 'Sentimento neutro'
-            }
+              summary: 'Sentimento neutro',
+            },
           },
-          timestamp: `2025-01-01T00:0${i < 10 ? '0' + i : i}:00Z`
+          timestamp: `2025-01-01T00:0${i < 10 ? '0' + i : i}:00Z`,
         };
         cacheService.addAnalysis(testAnalysis);
       }
@@ -156,10 +156,10 @@ describe('CacheService - Search Term', () => {
           sentiment: {
             sentiment: 'neutral' as const,
             confidence: 0.5,
-            summary: 'Sentimento neutro'
-          }
+            summary: 'Sentimento neutro',
+          },
         },
-        timestamp: '2025-01-01T00:00:00Z'
+        timestamp: '2025-01-01T00:00:00Z',
       };
 
       cacheService.addAnalysis(testAnalysis);

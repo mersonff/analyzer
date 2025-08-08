@@ -32,12 +32,12 @@ export class CacheService {
 
   public searchByTerm(term: string, limit: number = 10): AnalysisResult[] {
     const searchTerm = term.toLowerCase().trim();
-    
+
     if (!searchTerm) {
       return [];
     }
 
-    const matches = this.analyses.filter((analysis) => 
+    const matches = this.analyses.filter(analysis =>
       analysis.text.toLowerCase().includes(searchTerm)
     );
 

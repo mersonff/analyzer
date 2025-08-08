@@ -1,5 +1,8 @@
 import { StopwordsService } from './stopwordsService';
-import { SentimentAnalysisService, SentimentAnalysis } from './sentimentAnalysisService';
+import {
+  SentimentAnalysisService,
+  SentimentAnalysis,
+} from './sentimentAnalysisService';
 
 export interface WordCount {
   word: string;
@@ -27,7 +30,10 @@ export class TextAnalysisService {
     this.sentimentService = new SentimentAnalysisService();
   }
 
-  public async analyzeText(text: string, includeSentiment = true): Promise<TextAnalysis> {
+  public async analyzeText(
+    text: string,
+    includeSentiment = true
+  ): Promise<TextAnalysis> {
     if (!text || typeof text !== 'string') {
       throw new Error('Text must be a non-empty string');
     }
