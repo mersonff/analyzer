@@ -137,16 +137,6 @@ curl "http://localhost:3000/api/search-term?term=positivo&limit=5"
 }
 ```
 
-#### GET /api/search-term ⭐ (Novo!)
-Busca análises que contêm um termo específico.
-
-**Query Parameters:**
-- `term` (obrigatório): Termo a ser buscado nos textos
-- `limit` (opcional): Número máximo de resultados (padrão: 10, máximo: 100)
-
-**Response:**
-```json
-{
 ### Documentação Completa
 
 Acesse a documentação interativa da API em: `http://localhost:3000/api-docs`
