@@ -31,13 +31,17 @@ export class SentimentAnalysisService {
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.HUGGING_FACE_TOKEN}`,
+            Authorization: `Bearer ${process.env.HUGGING_FACE_TOKEN}`,
           },
           timeout: 10000,
         }
       );
 
-      if (!response.data || !Array.isArray(response.data) || !Array.isArray(response.data[0])) {
+      if (
+        !response.data ||
+        !Array.isArray(response.data) ||
+        !Array.isArray(response.data[0])
+      ) {
         throw new Error('Invalid response from Hugging Face API');
       }
 
@@ -51,7 +55,7 @@ export class SentimentAnalysisService {
         sentiment: result.label === 'POSITIVE' ? 'positive' : 'negative',
         score: result.score, // score is already a score value
         summary: this.generateSentimentSummary(
-          result.label === 'POSITIVE' ? 'positive' : 'negative', 
+          result.label === 'POSITIVE' ? 'positive' : 'negative',
           result.score
         ),
       };
@@ -128,10 +132,7 @@ export class SentimentAnalysisService {
     };
   }
 
-  private generateSentimentSummary(
-    sentiment: string,
-    score: number
-  ): string {
+  private generateSentimentSummary(sentiment: string, score: number): string {
     const scorePercent = Math.round(score * 100);
 
     const sentimentLabels: Record<string, string> = {
