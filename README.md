@@ -102,7 +102,7 @@ curl -X POST http://localhost:3000/api/analyze-text \
     ],
     "sentiment": {
       "sentiment": "positive",
-      "confidence": 0.95,
+      "score": 0.95,
       "summary": "O texto demonstra um sentimento muito positivo"
     }
   },
