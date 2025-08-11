@@ -80,7 +80,7 @@ describe('TextAnalysisService', () => {
         expect(['positive', 'negative', 'neutral']).toContain(
           result.sentiment.sentiment
         );
-        expect(typeof result.sentiment.confidence).toBe('number');
+        expect(typeof result.sentiment.score).toBe('number');
         expect(typeof result.sentiment.summary).toBe('string');
       }
     }, 15000); // Longer timeout for API call

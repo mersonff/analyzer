@@ -3,25 +3,27 @@ import logger from '../utils/logger';
 
 export interface SentimentResult {
   label: string;
-  confidence: number;
+  score: number;
 }
 
 export interface SentimentAnalysis {
   sentiment: string;
-  confidence: number;
+  score: number;
   summary: string;
 }
 
 export class SentimentAnalysisService {
+  // Nota: A API da Hugging Face pode ter mudanças nos modelos disponíveis
+  // O sistema usa fallback local confiável quando a API não está disponível
   private readonly huggingFaceUrl =
-    'https://api-inference.huggingface.co/models/distilbert-base-uncased-finetuned-sst-2-english';
+    'https://router.huggingface.co/hf-inference/models/distilbert/distilbert-base-uncased-finetuned-sst-2-english';
 
   public async analyzeSentiment(text: string): Promise<SentimentAnalysis> {
     try {
       // Limit text size for API call (Hugging Face has limits)
       const truncatedText = text.substring(0, 512);
 
-      const response = await axios.post<SentimentResult[]>(
+      const response = await axios.post<SentimentResult[][]>(
         this.huggingFaceUrl,
         {
           inputs: truncatedText,
@@ -29,32 +31,36 @@ export class SentimentAnalysisService {
         {
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.HUGGING_FACE_TOKEN}`,
           },
-          timeout: 10000, // 10 second timeout
+          timeout: 10000,
         }
       );
 
-      if (!response.data || !Array.isArray(response.data)) {
+      if (!response.data || !Array.isArray(response.data) || !Array.isArray(response.data[0])) {
         throw new Error('Invalid response from Hugging Face API');
       }
 
-      // Get the result with highest confidence
-      const result = response.data.reduce((prev, current) =>
-        current.confidence > prev.confidence ? current : prev
+      // Get the result with highest score from the first array
+      const results = response.data[0];
+      const result = results.reduce((prev, current) =>
+        current.score > prev.score ? current : prev
       );
 
-      const sentiment = result.label.toLowerCase();
-      const confidence = Math.round(result.confidence * 100) / 100;
-
       return {
-        sentiment,
-        confidence,
-        summary: this.generateSentimentSummary(sentiment, confidence),
+        sentiment: result.label === 'POSITIVE' ? 'positive' : 'negative',
+        confidence: result.score, // score is already a confidence value
+        summary: this.generateSentimentSummary(
+          result.label === 'POSITIVE' ? 'positive' : 'negative', 
+          result.score
+        ),
       };
     } catch (error) {
-      logger.error('Error analyzing sentiment with Hugging Face:', error);
-
-      // Fallback to simple keyword-based sentiment analysis
+      logger.error('error', {
+        message: `Error analyzing sentiment with Hugging Face: ${(error as Error).message}`,
+        service: 'text-analyzer',
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+      });
       return this.fallbackSentimentAnalysis(text);
     }
   }
