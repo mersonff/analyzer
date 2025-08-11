@@ -33,7 +33,7 @@ describe('CacheService - Search Term', () => {
           topWords: [{ word: 'wonderful', count: 1 }],
           sentiment: {
             sentiment: 'positive' as const,
-            confidence: 0.9,
+            score: 0.9,
             summary: 'Sentimento positivo detectado',
           },
         },
@@ -53,7 +53,7 @@ describe('CacheService - Search Term', () => {
           topWords: [{ word: 'example', count: 1 }],
           sentiment: {
             sentiment: 'neutral' as const,
-            confidence: 0.5,
+            score: 0.5,
             summary: 'Sentimento neutro',
           },
         },
@@ -93,7 +93,7 @@ describe('CacheService - Search Term', () => {
           topWords: [{ word: 'testing', count: 1 }],
           sentiment: {
             sentiment: 'neutral' as const,
-            confidence: 0.5,
+            score: 0.5,
             summary: 'Sentimento neutro',
           },
         },
@@ -126,7 +126,7 @@ describe('CacheService - Search Term', () => {
             topWords: [{ word: 'test', count: 1 }],
             sentiment: {
               sentiment: 'neutral' as const,
-              confidence: 0.5,
+              score: 0.5,
               summary: 'Sentimento neutro',
             },
           },
@@ -155,7 +155,7 @@ describe('CacheService - Search Term', () => {
           topWords: [{ word: 'sample', count: 1 }],
           sentiment: {
             sentiment: 'neutral' as const,
-            confidence: 0.5,
+            score: 0.5,
             summary: 'Sentimento neutro',
           },
         },

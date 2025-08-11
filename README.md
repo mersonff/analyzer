@@ -102,7 +102,7 @@ curl -X POST http://localhost:3000/api/analyze-text \
     ],
     "sentiment": {
       "sentiment": "positive",
-      "confidence": 0.95,
+      "score": 0.95,
       "summary": "O texto demonstra um sentimento muito positivo"
     }
   },
@@ -181,9 +181,27 @@ O projeto utiliza:
 
 ## Análise de Sentimento com IA
 
-- **API Principal**: Hugging Face (DistilBERT)
-- **Fallback Local**: Sistema baseado em palavras-chave
+- **API Principal**: Hugging Face (DistilBERT) - **Requer autenticação** 🔑
+- **Fallback Local**: Sistema baseado em palavras-chave (sempre disponível)
 - **Saída**: Sentimento (positive/negative/neutral), confiança e resumo em português
+
+### 🔧 Configuração da API Hugging Face (Opcional)
+
+Para usar análise de sentimento com IA real:
+
+1. **Criar conta**: [huggingface.co](https://huggingface.co/join)
+2. **Gerar token**: Settings → Access Tokens → New Token
+3. **Configurar variável de ambiente**:
+   ```bash
+   # .env
+   HUGGING_FACE_TOKEN=hf_xxxxxxxxxxxxxxxxx
+   ```
+4. **Descomentar linha de autorização** em `src/services/sentimentAnalysisService.ts`:
+   ```typescript
+   'Authorization': `Bearer ${process.env.HUGGING_FACE_TOKEN}`,
+   ```
+
+**Sem token**: O sistema usa fallback local (funciona perfeitamente!) 🚀
 
 ## CI/CD e Qualidade
 

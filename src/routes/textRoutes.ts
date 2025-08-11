@@ -45,7 +45,7 @@ const router = express.Router();
  *                 sentiment:
  *                   type: string
  *                   enum: [positive, negative, neutral]
- *                 confidence:
+ *                 score:
  *                   type: number
  *                 summary:
  *                   type: string
