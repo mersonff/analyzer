@@ -49,7 +49,7 @@ export class SentimentAnalysisService {
 
       return {
         sentiment: result.label === 'POSITIVE' ? 'positive' : 'negative',
-        confidence: result.score, // score is already a confidence value
+        score: result.score, // score is already a score value
         summary: this.generateSentimentSummary(
           result.label === 'POSITIVE' ? 'positive' : 'negative', 
           result.score
@@ -108,31 +108,31 @@ export class SentimentAnalysisService {
     ).length;
 
     let sentiment: string;
-    let confidence: number;
+    let score: number;
 
     if (positiveCount > negativeCount) {
       sentiment = 'positive';
-      confidence = Math.min(0.6 + (positiveCount - negativeCount) * 0.1, 0.95);
+      score = Math.min(0.6 + (positiveCount - negativeCount) * 0.1, 0.95);
     } else if (negativeCount > positiveCount) {
       sentiment = 'negative';
-      confidence = Math.min(0.6 + (negativeCount - positiveCount) * 0.1, 0.95);
+      score = Math.min(0.6 + (negativeCount - positiveCount) * 0.1, 0.95);
     } else {
       sentiment = 'neutral';
-      confidence = 0.5;
+      score = 0.5;
     }
 
     return {
       sentiment,
-      confidence: Math.round(confidence * 100) / 100,
-      summary: `Análise baseada em palavras-chave (fallback): ${sentiment} com ${Math.round(confidence * 100)}% de confiança`,
+      score: Math.round(score * 100) / 100,
+      summary: `Análise baseada em palavras-chave (fallback): ${sentiment} com ${Math.round(score * 100)}% de confiança`,
     };
   }
 
   private generateSentimentSummary(
     sentiment: string,
-    confidence: number
+    score: number
   ): string {
-    const confidencePercent = Math.round(confidence * 100);
+    const scorePercent = Math.round(score * 100);
 
     const sentimentLabels: Record<string, string> = {
       positive: 'positivo',
@@ -142,12 +142,12 @@ export class SentimentAnalysisService {
 
     const sentimentLabel = sentimentLabels[sentiment] || sentiment;
 
-    if (confidencePercent >= 80) {
-      return `O texto demonstra um sentimento claramente ${sentimentLabel} (${confidencePercent}% de confiança).`;
-    } else if (confidencePercent >= 60) {
-      return `O texto tende a ser ${sentimentLabel} (${confidencePercent}% de confiança).`;
+    if (scorePercent >= 80) {
+      return `O texto demonstra um sentimento claramente ${sentimentLabel} (${scorePercent}% de confiança).`;
+    } else if (scorePercent >= 60) {
+      return `O texto tende a ser ${sentimentLabel} (${scorePercent}% de confiança).`;
     } else {
-      return `O sentimento do texto é incerto, mas ligeiramente ${sentimentLabel} (${confidencePercent}% de confiança).`;
+      return `O sentimento do texto é incerto, mas ligeiramente ${sentimentLabel} (${scorePercent}% de confiança).`;
     }
   }
 }
